@@ -55,12 +55,12 @@ Create a `.env` file in the project root with the following variables:
 ```
 # MongoDB Configuration
 MONGO_URI=mongodb://localhost:27017/
-MONGO_DB_NAME=pdf_llm_db
+DB_NAME=pdf_llm_db
 
 # AWS S3 Configuration
-AWS_ACCESS_KEY_ID=your_access_key_id
-AWS_SECRET_ACCESS_KEY=your_secret_access_key
-AWS_REGION=your-aws-region
+CUSTOM_AWS_ACCESS_KEY=your_access_key_id
+CUSTOM_AWS_SECRET_KEY=your_secret_access_key
+CUSTOM_AWS_REGION=your-aws-region
 S3_BUCKET_NAME=your-bucket-name
 
 # JWT Configuration
@@ -70,6 +70,7 @@ JWT_ACCESS_TOKEN_EXPIRE_MINUTES=60
 
 # Google AI Platform (Gemini)
 GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL_NAME=gemini-pro
 ```
 
 ## Starting the Server
@@ -88,6 +89,35 @@ The application is deployed as a serverless function using AWS Lambda with API G
 ![AWS Deployment Architecture](./images/aws-deployment.png)
 
 The API can be accessed at: https://j8bq608yd4.execute-api.ap-south-1.amazonaws.com/main
+
+## CI/CD with GitHub Actions
+
+This project uses GitHub Actions for continuous integration and deployment to AWS Lambda.
+
+### Workflow Configuration
+
+The GitHub Actions workflow automatically:
+1. Builds the Docker image
+2. Pushes it to Amazon ECR
+3. Updates the Lambda function with the new image
+4. Configures environment variables
+
+### Workflow Triggers
+
+- **Automatic**: Workflow runs when code is pushed to the main branch
+- **Manual**: Can be triggered from the GitHub Actions tab using the "Run workflow" button
+
+### GitHub Secrets
+
+The following secrets must be configured in your GitHub repository:
+- `AWS_ACCESS_KEY`: AWS access key for GitHub Actions deployment
+- `AWS_SECRET_KEY`: AWS secret key for GitHub Actions deployment
+- `MONGO_URI`: MongoDB connection string
+- `DB_NAME`: MongoDB database name
+- `S3_BUCKET_NAME`: AWS S3 bucket name
+- `GEMINI_API_KEY`: Google Gemini API key
+- `GEMINI_MODEL_NAME`: Gemini model name
+- `JWT_SECRET_KEY`: Secret key for JWT token generation
 
 ## API Documentation
 
@@ -140,7 +170,7 @@ Click below to watch the demo video:
 
 ## Assumptions
 
-- Used mock PDFs from `./samples/sample_invoices/`
+- Used mock PDFs from `./samples/`
 - PDFs are text-based and not scanned documents
 - All PDFs are reasonably sized (under 10MB)
 - MongoDB and S3 credentials are properly configured
@@ -156,6 +186,8 @@ pdf-llm-backend/
 ├── Dockerfile              # Docker container definition
 ├── requirements.txt        # Project dependencies
 ├── README.md               # Project documentation
+├── .github/                # GitHub Actions workflows
+│   └── workflows/          # CI/CD workflow definitions
 ├── images/                 # Project images and screenshots
 ├── logs/                   # Application logs
 │   └── app.log
