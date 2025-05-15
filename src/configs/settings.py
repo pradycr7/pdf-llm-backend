@@ -9,9 +9,9 @@ MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME")
 
 # AWS S3 configuration
-AWS_ACCESS_KEY_ID = os.getenv("AWS_access_key")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_secret_key")
-AWS_REGION = os.getenv("AWS_REGION")
+AWS_ACCESS_KEY_ID = os.getenv("CUSTOM_AWS_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY = os.getenv("CUSTOM_AWS_SECRET_KEY")
+AWS_REGION = os.getenv("CUSTOM_AWS_REGION")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
 
 # LLM configuration
