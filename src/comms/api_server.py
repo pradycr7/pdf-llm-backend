@@ -23,6 +23,7 @@ class APIRouterWrapper:
         """Main route setup method that delegates to feature-specific methods"""
         self._setup_document_upload_routes()
         self._setup_document_retrieval_routes()
+        self._setup_auth_routes()
         
     
     def _setup_document_upload_routes(self):
@@ -116,3 +117,14 @@ class APIRouterWrapper:
             }
             
             return JSONResponse(content=response)
+        
+        
+    def _setup_auth_routes(self):
+        """Authentication and token-related routes"""
+        @self.router.post("/generate-token")
+        @timing_decorator(log_level="info", description="Generate JWT token")
+        async def generate_token():
+            """Generate a JWT token without requiring API key"""
+            return await self.jwt_auth.generate_token()
+        
+    
