@@ -188,6 +188,7 @@ pdf-llm-backend/
 ├── README.md               # Project documentation
 ├── .github/                # GitHub Actions workflows
 │   └── workflows/          # CI/CD workflow definitions
+        └── deploy_to_lambda.yml # YML which contains instrcutions
 ├── images/                 # Project images and screenshots
 ├── logs/                   # Application logs
 │   └── app.log
