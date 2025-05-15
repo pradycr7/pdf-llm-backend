@@ -39,9 +39,36 @@ jobs:
             --function-name pdf-llm-backend \
             --image-uri 061039807756.dkr.ecr.ap-south-1.amazonaws.com/main/pdf-llm-backend:latest
       
-      - name: Update Lambda environment variables
+      # Add delay to allow Lambda update to complete
+      - name: Wait for Lambda function update to complete
         run: |
-          aws lambda update-function-configuration \
-            --function-name pdf-llm-backend \
-            --environment "Variables={MONGO_URI=${{ secrets.MONGO_URI }},DB_NAME=${{ secrets.DB_NAME }},AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }},AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }},AWS_REGION=ap-south-1,S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }},GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},GEMINI_MODEL_NAME=${{ secrets.GEMINI_MODEL_NAME }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=HS256,JWT_ACCESS_TOKEN_EXPIRE_MINUTES=60}"
-
+          echo "Waiting for Lambda function code update to complete..."
+          sleep 30  # Wait 30 seconds for update to complete
+      
+      # Add retry logic for environment variables update
+      - name: Update Lambda environment variables with retry
+        run: |
+          max_attempts=5
+          attempt=1
+          update_success=false
+          
+          while [ $attempt -le $max_attempts ] && [ "$update_success" = false ]
+          do
+            echo "Attempt $attempt: Updating Lambda environment variables..."
+            
+            if aws lambda update-function-configuration \
+              --function-name pdf-llm-backend \
+              --environment "Variables={MONGO_URI=${{ secrets.MONGO_URI }},DB_NAME=${{ secrets.DB_NAME }},AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }},AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }},AWS_REGION=ap-south-1,S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }},GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},GEMINI_MODEL_NAME=${{ secrets.GEMINI_MODEL_NAME }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=HS256,JWT_ACCESS_TOKEN_EXPIRE_MINUTES=60}"; then
+              echo "✅ Environment variables update successful"
+              update_success=true
+            else
+              echo "❌ Attempt $attempt failed, retrying in 15 seconds..."
+              sleep 15
+              attempt=$((attempt+1))
+            fi
+          done
+          
+          if [ "$update_success" = false ]; then
+            echo "⚠️ Failed to update environment variables after $max_attempts attempts"
+            exit 1
+          fi
