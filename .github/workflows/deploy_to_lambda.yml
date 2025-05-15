@@ -33,8 +33,15 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
       
-      - name: Update Lambda function
+      - name: Update Lambda function code
         run: |
           aws lambda update-function-code \
             --function-name pdf-llm-backend \
             --image-uri 061039807756.dkr.ecr.ap-south-1.amazonaws.com/main/pdf-llm-backend:latest
+      
+      - name: Update Lambda environment variables
+        run: |
+          aws lambda update-function-configuration \
+            --function-name pdf-llm-backend \
+            --environment "Variables={MONGO_URI=${{ secrets.MONGO_URI }},DB_NAME=${{ secrets.DB_NAME }},AWS_access_key=${{ secrets.AWS_ACCESS_KEY }},AWS_secret_key=${{ secrets.AWS_SECRET_KEY }},AWS_REGION=ap-south-1,S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }},GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},GEMINI_MODEL_NAME=${{ secrets.GEMINI_MODEL_NAME }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=HS256,JWT_ACCESS_TOKEN_EXPIRE_MINUTES=60}"
+
