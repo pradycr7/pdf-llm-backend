@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+motor
+pdfplumber
+pymongo
+pydantic
+python-dotenv
+google-generativeai
+pandas
+numpy
+mangum
+boto3
+python-jose[cryptography]
+python-multipart
+pypdf
