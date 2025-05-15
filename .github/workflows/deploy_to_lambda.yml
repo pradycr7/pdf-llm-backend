@@ -72,3 +72,19 @@ jobs:
             echo "⚠️ Failed to update environment variables after $max_attempts attempts"
             exit 1
           fi
+      # Add this step after your environment variables update
+      - name: Add API Gateway Lambda permission
+        run: |
+          # Check if permission already exists (prevents errors on re-runs)
+          if ! aws lambda get-policy --function-name pdf-llm-backend 2>/dev/null | grep -q "j8bq608yd4"; then
+            aws lambda add-permission \
+              --function-name pdf-llm-backend \
+              --statement-id apigateway-permission \
+              --action lambda:InvokeFunction \
+              --principal apigateway.amazonaws.com \
+              --source-arn "arn:aws:execute-api:ap-south-1:061039807756:j8bq608yd4/*/*/*"
+            echo "✅ Lambda permission added successfully"
+          else
+            echo "✅ Lambda permission already exists"
+          fi
+
