@@ -1,0 +1,40 @@
+
+2025-05-15 13:34:08,511 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 13:34:09,634 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
+2025-05-15 15:01:08,567 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 15:01:09,496 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
+2025-05-15 15:02:01,180 - pdf_llm_backend - INFO - Starting Upload PDF and extract text
+2025-05-15 15:02:01,180 - pdf_llm_backend - INFO - Processing upload of blank_1.pdf
+2025-05-15 15:02:01,185 - pdf_llm_backend - WARNING - Invalid PDF rejected: blank_1.pdf - PDF page is blank or contains no extractable text
+2025-05-15 15:02:01,185 - pdf_llm_backend - ERROR - Upload PDF and extract text failed after 0.005s: 400: PDF page is blank or contains no extractable text
+2025-05-15 15:02:32,335 - pdf_llm_backend - INFO - Starting Upload PDF and extract text
+2025-05-15 15:02:32,335 - pdf_llm_backend - INFO - Processing upload of invalid_sample.pdf
+2025-05-15 15:02:32,335 - pdf_llm_backend - WARNING - Invalid PDF rejected: invalid_sample.pdf - File size is too small (less than 1024 bytes)
+2025-05-15 15:02:32,336 - pdf_llm_backend - ERROR - Upload PDF and extract text failed after 0.000s: 400: File size is too small (less than 1024 bytes)
+2025-05-15 15:02:53,287 - pdf_llm_backend - INFO - Starting Upload PDF and extract text
+2025-05-15 15:02:53,288 - pdf_llm_backend - INFO - Processing upload of Web_Application_Security_Testing_Report_Neophyte_Neometry_v1.1.pdf
+2025-05-15 15:02:53,292 - pdf_llm_backend - WARNING - Invalid PDF rejected: Web_Application_Security_Testing_Report_Neophyte_Neometry_v1.1.pdf - PDF content validation failed: 
+2025-05-15 15:02:53,293 - pdf_llm_backend - ERROR - Upload PDF and extract text failed after 0.005s: 400: PDF content validation failed: 
+2025-05-15 15:14:09,871 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 15:14:10,583 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
+2025-05-15 15:14:13,755 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 15:14:16,958 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 15:14:17,663 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
+2025-05-15 15:14:25,951 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 15:14:26,647 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
+2025-05-15 15:14:29,030 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 15:14:29,716 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
+2025-05-15 15:14:37,705 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 15:14:38,445 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
+2025-05-15 15:14:42,831 - pdf_llm_backend - INFO - Starting Upload PDF and extract text
+2025-05-15 15:14:42,831 - pdf_llm_backend - INFO - Processing upload of Web_Application_Security_Testing_Report_Neophyte_Neometry_v1.1.pdf
+2025-05-15 15:14:42,923 - pdf_llm_backend - WARNING - Invalid PDF rejected: Web_Application_Security_Testing_Report_Neophyte_Neometry_v1.1.pdf - PDF is encrypted and cannot be processed
+2025-05-15 15:14:42,923 - pdf_llm_backend - ERROR - Upload PDF and extract text failed after 0.091s: 400: PDF is encrypted and cannot be processed
+2025-05-15 15:14:56,231 - pdf_llm_backend - INFO - Starting Upload PDF and extract text
+2025-05-15 15:14:56,231 - pdf_llm_backend - INFO - Processing upload of blank_1.pdf
+2025-05-15 15:14:56,234 - pdf_llm_backend - WARNING - Invalid PDF rejected: blank_1.pdf - PDF page is blank or contains no extractable text
+2025-05-15 15:14:56,234 - pdf_llm_backend - ERROR - Upload PDF and extract text failed after 0.003s: 400: PDF page is blank or contains no extractable text
+2025-05-15 15:15:03,647 - pdf_llm_backend - INFO - Starting Upload PDF and extract text
+2025-05-15 15:15:03,648 - pdf_llm_backend - INFO - Processing upload of invalid_sample.pdf
+2025-05-15 15:15:03,650 - pdf_llm_backend - WARNING - Invalid PDF rejected: invalid_sample.pdf - File size is too small (less than 1024 bytes)
+2025-05-15 15:15:03,650 - pdf_llm_backend - ERROR - Upload PDF and extract text failed after 0.003s: 400: File size is too small (less than 1024 bytes)
