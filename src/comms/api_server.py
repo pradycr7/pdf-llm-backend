@@ -24,6 +24,7 @@ class APIRouterWrapper:
         self._setup_document_upload_routes()
         self._setup_document_retrieval_routes()
         self._setup_auth_routes()
+        self._setup_llm_processing_routes()
         
     
     def _setup_document_upload_routes(self):
@@ -127,4 +128,40 @@ class APIRouterWrapper:
             """Generate a JWT token without requiring API key"""
             return await self.jwt_auth.generate_token()
         
-    
+    def _setup_llm_processing_routes(self):
+        """Routes for LLM-based document processing (summarization and querying)"""
+        @self.router.post('/summarize/{doc_id}')
+        @timing_decorator(log_level="info", description="Summarize document")
+        async def summarize_document(
+            doc_id: str = Path(..., description="Document ID to summarize"),
+            token_payload: dict = Depends(self.jwt_auth.get_token_verify_dependency())
+        ):
+            try:
+                object_id = ObjectId(doc_id)
+            except Exception as e:
+                app_logger.error(f"LLM generation failed for document {doc_id}: {str(e)}", exc_info=True)
+                raise HTTPException(status_code=400, detail="Invalid ObjectId format")
+            
+            document = await self.mongodb.get_documents_collection().find_one({"_id": object_id})
+            if not document:
+                app_logger.error(f"Document not found for ID: {doc_id}")
+                raise HTTPException(status_code=404, detail="Document not found")
+            
+            pdf_content = document.get("extracted_text", "")
+            if not pdf_content:
+                app_logger.error(f"Document has no extracted text for ID: {doc_id}")
+                raise HTTPException(status_code=400, detail="Document has no extracted text")
+            
+            prompt = "Summarize the following content in 2 sentences:\n\n"
+            final_prompt = f"{prompt}{pdf_content}"
+            
+            try:
+                response = await self.llm_service.generate_content(final_prompt)
+                
+                return JSONResponse(content={
+                    "doc_id": doc_id,
+                    "summary": response
+                })
+            except Exception as e:
+                app_logger.error(f"Summarization failed for document {doc_id}: {str(e)}", exc_info=True)
+                raise HTTPException(status_code=500, detail=f"Summarization failed: {str(e)}")
