@@ -6,6 +6,4 @@ from src.orchestrator import Orchestrator
 
 orchestrator = Orchestrator().initialize()
 # The Mangum handler wraps the FastAPI app for AWS Lambda compatibility
-handler = Mangum(orchestrator.fastapi_app.app,
-                api_gateway_root_path="/main",
-                lifespan="off")
+handler = Mangum(orchestrator.fastapi_app.app)
