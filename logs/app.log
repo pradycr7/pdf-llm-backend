@@ -38,3 +38,5 @@
 2025-05-15 15:15:03,648 - pdf_llm_backend - INFO - Processing upload of invalid_sample.pdf
 2025-05-15 15:15:03,650 - pdf_llm_backend - WARNING - Invalid PDF rejected: invalid_sample.pdf - File size is too small (less than 1024 bytes)
 2025-05-15 15:15:03,650 - pdf_llm_backend - ERROR - Upload PDF and extract text failed after 0.003s: 400: File size is too small (less than 1024 bytes)
+2025-05-15 23:40:18,338 - pdf_llm_backend - INFO - Logger initialized in local environment
+2025-05-15 23:40:19,280 - pdf_llm_backend - INFO - MongoDB initialized DB name: pdf_summarizer
