@@ -22,6 +22,7 @@ class APIRouterWrapper:
     def _setup_routes(self):
         """Main route setup method that delegates to feature-specific methods"""
         self._setup_document_upload_routes()
+        self._setup_document_retrieval_routes()
         
     
     def _setup_document_upload_routes(self):
@@ -87,4 +88,31 @@ class APIRouterWrapper:
                 app_logger.error(f"Error during upload process: {str(e)}")
                 raise HTTPException(status_code=500, detail=f"Upload to s3 failed: {str(e)}")
 
-    
+    def _setup_document_retrieval_routes(self):
+        """Routes for document retrieval and listing"""
+        @self.router.get('/documents/{doc_id}')
+        @timing_decorator(log_level="info", description="Get document by ID")
+        async def get_document(doc_id: str = Path(..., description="The ID of the document to retrieve")):
+            try:
+                # Convert the doc_id from string to ObjectId
+                object_id = ObjectId(doc_id)
+            except Exception as e:
+                app_logger.error(f"LLM generation failed for document {doc_id}: {str(e)}", exc_info=True)
+                raise HTTPException(status_code=400, detail="Invalid ObjectId format")
+
+            # Query the document using ObjectId
+            document = await self.mongodb.get_documents_collection().find_one({"_id": object_id})
+            
+            if not document:
+                app_logger.error(f"Document not found for ID: {doc_id}")
+                raise HTTPException(status_code=404, detail="Document not found")
+            
+            # Prepare the response content
+            response = {
+                "doc_id": str(document["_id"]),
+                "filename": document["filename"],
+                "upload_time": document["upload_time"].isoformat(),
+                "extracted_text": document["extracted_text"]
+            }
+            
+            return JSONResponse(content=response)
