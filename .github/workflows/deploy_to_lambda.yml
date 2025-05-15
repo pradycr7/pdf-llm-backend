@@ -1,0 +1,40 @@
+name: Deploy to AWS Lambda
+
+on:
+  push:
+    branches:
+      - main  # Or use master if that's your default branch
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: 061039807756.dkr.ecr.ap-south-1.amazonaws.com
+          ECR_REPOSITORY: main/pdf-llm-backend
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      
+      - name: Update Lambda function
+        run: |
+          aws lambda update-function-code \
+            --function-name pdf-llm-backend \
+            --image-uri 061039807756.dkr.ecr.ap-south-1.amazonaws.com/main/pdf-llm-backend:latest
